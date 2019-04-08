@@ -12,87 +12,44 @@ class Yatzy(dice1: Int, dice2: Int, dice3: Int, dice4: Int, dice5: Int) {
     }
 
     fun chance(): Int {
-        var total = 0
-        total += dice[0]
-        total += dice[1]
-        total += dice[2]
-        total += dice[3]
-        total += dice[4]
-        return total
+        return dice.sum()
     }
 
     fun yatzy(): Int {
-        val counts = IntArray(6)
-        for (die in dice)
-            counts[die - 1]++
-        for (i in 0..5)
-            if (counts[i] == 5)
-                return 50
-        return 0
+        val first = dice[0]
+        when(dice.all { it == first }){
+            true -> return 50
+            false -> return 0
+        }
     }
 
     fun ones(): Int {
-        var sum = 0
-        if (dice[0] == 1) sum++
-        if (dice[1] == 1) sum++
-        if (dice[2] == 1) sum++
-        if (dice[3] == 1) sum++
-        if (dice[4] == 1) sum++
-
-        return sum
+        return dice.filter{it == 1}.sum()
     }
 
     fun twos(): Int {
-        var sum = 0
-        if (dice[0] == 2) sum += 2
-        if (dice[1] == 2) sum += 2
-        if (dice[2] == 2) sum += 2
-        if (dice[3] == 2) sum += 2
-        if (dice[4] == 2) sum += 2
-        return sum
+        return dice.filter{it == 2}.sum()
     }
 
     fun threes(): Int {
-        var s = 0
-        if (dice[0] == 3) s += 3
-        if (dice[1] == 3) s += 3
-        if (dice[2] == 3) s += 3
-        if (dice[3] == 3) s += 3
-        if (dice[4] == 3) s += 3
-        return s
+        return dice.filter{it == 3}.sum()
     }
 
     fun fours(): Int {
-        var sum = 0
-        for (at in 0..4) {
-            if (dice[at] == 4) {
-                sum += 4
-            }
-        }
-        return sum
+        return dice.filter{it == 4}.sum()
     }
 
     fun fives(): Int {
-        var s = 0
-        var i = 0
-        while (i < dice.size) {
-            if (dice[i] == 5)
-                s = s + 5
-            i++
-        }
-        return s
+        return dice.filter{it == 5}.sum()
     }
 
     fun sixes(): Int {
-        var sum = 0
-        for (at in dice.indices)
-            if (dice[at] == 6)
-                sum = sum + 6
-        return sum
+        return dice.filter{it == 6}.sum()
     }
 
 
     fun pair(): Int {
+
         val counts = IntArray(6)
         counts[dice[0] - 1]++
         counts[dice[1] - 1]++
