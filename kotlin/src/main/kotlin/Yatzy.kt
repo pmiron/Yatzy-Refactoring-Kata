@@ -1,4 +1,3 @@
-
 class Yatzy(dice1: Int, dice2: Int, dice3: Int, dice4: Int, dice5: Int) {
 
     protected var dice: IntArray = IntArray(5)
@@ -47,46 +46,30 @@ class Yatzy(dice1: Int, dice2: Int, dice3: Int, dice4: Int, dice5: Int) {
         return dice.filter{it == 6}.sum()
     }
 
+    data class Result(val max: Int, val list: List<Int>)
 
     fun pair(): Int {
-
-        val counts = IntArray(6)
-        counts[dice[0] - 1]++
-        counts[dice[1] - 1]++
-        counts[dice[2] - 1]++
-        counts[dice[3] - 1]++
-        counts[dice[4] - 1]++
-        var at: Int
-        at = 0
-        while (at != 6) {
-            if (counts[6 - at - 1] >= 2)
-                return (6 - at) * 2
-            at++
-        }
-        return 0
+        val (max, _) = pairHelper(dice.toList())
+        return max + max
     }
 
     fun twoPair(): Int {
-        val counts = IntArray(6)
-        counts[dice[0] - 1]++
-        counts[dice[1] - 1]++
-        counts[dice[2] - 1]++
-        counts[dice[3] - 1]++
-        counts[dice[4] - 1]++
-        var n = 0
-        var score = 0
-        var i = 0
-        while (i < 6) {
-            if (counts[6 - i - 1] >= 2) {
-                n++
-                score += 6 - i
-            }
-            i += 1
+        val (firstMax, list) = pairHelper(dice.toList())
+        val (secondMax, _) = pairHelper(list)
+        return firstMax + firstMax + secondMax + secondMax
+    }
+
+    private fun pairHelper(diceValues: List<Int>): Result {
+        if(diceValues.isEmpty())
+            return Result(0, diceValues)
+        val maxDie = diceValues.max()
+        val maxDieFirstIndex = diceValues.indexOfFirst { it == maxDie }
+        val maxDieLastIndex = diceValues.indexOfLast { it == maxDie }
+
+        if(maxDieFirstIndex != maxDieLastIndex) {
+            return Result(maxDie!!, diceValues.minusElement(maxDie).minusElement(maxDie))
         }
-        return if (n == 2)
-            score * 2
-        else
-            0
+        return pairHelper(diceValues.minusElement(maxDie!!))
     }
 
     fun threeOfAKind(): Int {
